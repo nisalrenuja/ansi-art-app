@@ -14,24 +14,28 @@ app.get("/", (req, res) => {
 
   if (!isCurl) {
     // Redirect to GitHub if not using curl
-    res.redirect(302, "https://github.com/YourGitHubRepo/ascii-art.git");
+    res.redirect(302, "https://github.com/nisalrenuja/ascii-art.git");
     return;
   }
 
   const bannerMessage = `
 \x1b[1;32mWelcome to the ASCII Art Server!\x1b[0m
 Use the following command to enjoy sound effects:
-\x1b[1;33mcurl -sN http://yourserver.com | bash\x1b[0m
+\x1b[1;33mcurl -sN http://localhost:${PORT} | bash\x1b[0m
     `;
 
-  // Spawn a child process to display ASCII art
+  // Check if the ASCII art file exists
   const artFile = path.join(__dirname, "art.txt");
   if (!fs.existsSync(artFile)) {
-    res.write("ASCII art file not found.");
+    res.write(bannerMessage);
+    res.write(
+      "\n\n\x1b[1;31mASCII art file not found. Please add 'art.txt' to the server directory.\x1b[0m\n"
+    );
     res.end();
     return;
   }
 
+  // Spawn a child process to display the ASCII art
   const displayProcess = spawn("cat", [artFile]);
 
   res.write(bannerMessage + "\n\n");
