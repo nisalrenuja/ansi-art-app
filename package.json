@@ -1,0 +1,15 @@
+{
+  "name": "ascii-art-server",
+  "version": "1.0.0",
+  "description": "A simple ASCII art server with Node.js",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "tree-kill": "^1.2.2"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}
