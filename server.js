@@ -14,7 +14,7 @@ app.get("/", (req, res) => {
 
   if (!isCurl) {
     // Redirect to GitHub if not using curl
-    res.redirect(302, "https://github.com/nisalrenuja/ascii-art.git");
+    res.redirect(302, "https://github.com/nisalrenuja/ansi-art-app.git");
     return;
   }
 
