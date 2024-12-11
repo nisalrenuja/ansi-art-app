@@ -7,6 +7,10 @@ const kill = require("tree-kill");
 const app = express();
 const PORT = 80;
 
+// GitHub raw URLs for fallback
+const GITHUB_RAW_BASE_URL =
+  "https://raw.githubusercontent.com/nisalrenuja/ansi-art-app/main";
+
 // Handle root route
 app.get("/", (req, res) => {
   const userAgent = req.headers["user-agent"];
@@ -24,13 +28,14 @@ Use the following command to enjoy sound effects:
 \x1b[1;33mcurl -sN http://localhost:${PORT} | bash\x1b[0m
     `;
 
-  // Check if the ASCII art file exists
+  // Check if the ASCII art file exists locally
   const artFile = path.join(__dirname, "art.txt");
   if (!fs.existsSync(artFile)) {
     res.write(bannerMessage);
     res.write(
-      "\n\n\x1b[1;31mASCII art file not found. Please add 'art.txt' to the server directory.\x1b[0m\n"
+      `\n\n\x1b[1;31mASCII art file not found locally. Fetch it from GitHub:\n\x1b[0m`
     );
+    res.write(`\x1b[1;34mcurl ${GITHUB_RAW_BASE_URL}/art.txt\x1b[0m\n`);
     res.end();
     return;
   }
@@ -70,7 +75,7 @@ app.get("/win.py", (req, res) => {
       .replace(/\n/g, "\r\n");
     res.write(scriptContent);
   } else {
-    res.write("Python script not found.");
+    res.redirect(`${GITHUB_RAW_BASE_URL}/win.py`);
   }
   res.end();
 });
@@ -81,7 +86,7 @@ app.get("/art.txt", (req, res) => {
   if (fs.existsSync(artPath)) {
     res.sendFile(artPath);
   } else {
-    res.status(404).send("Art file not found.");
+    res.redirect(`${GITHUB_RAW_BASE_URL}/art.txt`);
   }
 });
 
